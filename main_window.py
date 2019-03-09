@@ -3,7 +3,7 @@
 
 from tkinter import font
 from tkinter import *
-import MyProject.data
+import data, settings, new_message
 
 menuBackground = "#1A1F30"
 activeItemBg = '#151825'
@@ -22,27 +22,29 @@ class Client:
 
         header = self.mailHeader.cget("text")
         if action == "composeEmailButton":
-            pass
+            new_message.open_new_message(root)
         elif action == "InboxButton":
             self.InboxButton.config(bg=activeItemBg)
-            self.update_emails(MyProject.data.inbox)
+            self.update_emails(data.inbox)
             header = "Inbox"
         elif action == "DraftsButton":
             header = "Drafts"
             self.DraftsButton.config(bg=activeItemBg)
-            self.update_emails(MyProject.data.drafts)
+            self.update_emails(data.drafts)
         elif action == "SentButton":
             header = "Sent"
             self.SentButton.config(bg=activeItemBg)
-            self.update_emails(MyProject.data.sent)
+            self.update_emails(data.sent)
         elif action == "SpamButton":
             header = "Spam"
             self.SpamButton.config(bg=activeItemBg)
-            self.update_emails(MyProject.data.spam)
+            self.update_emails(data.spam)
         elif action == "TrashButton":
             header = "Trash"
             self.TrashButton.config(bg=activeItemBg)
-            self.update_emails(MyProject.data.trash)
+            self.update_emails(data.trash)
+        elif action == "Settings":
+            settings.open_settings(root)
 
         # self.mailHeader.config(text=header)
         self.currentFolder = header
@@ -68,6 +70,7 @@ class Client:
         self.topMenu.add_cascade(label="File", menu=self.menuData)
         self.menuData.add_command(label="Compose Email")
         self.menuData.add_command(label="Export Emails")
+        self.menuData.add_command(label="Settings", command=callback(self.menu_action, "Settings"))
         self.menuData.add_command(label="Exit")
 
 
@@ -133,21 +136,21 @@ class Client:
 
         # Emails List
         self.emailListBackground = "white"
-        self.inactiveEmail = "#DCDCDC"
-        self.fontFrom = font.Font(size=8, weight="normal")
-        self.fontSubject = font.Font(size=10, weight="bold")
+        self.inactiveEmail = "#DAE1EC"
+        self.fontFrom = font.Font(size=9, weight="normal")
+        self.fontSubject = font.Font(size=11, weight="bold")
         self.fontDate = font.Font(size=8, weight="normal")
         self.fontMessage = font.Font(size=9, weight="normal")
 
-        self.emailsList = Frame(self.mainFrame, relief=GROOVE, bg="#696969")
+        self.emailsList = Frame(self.mainFrame, bg="#f7f7f7")
         self.emailsList.pack(fill=BOTH, side=LEFT)
 
         # Emails List: Search Frame
-        self.header = Frame(self.emailsList, relief=GROOVE, borderwidth=1, bg=self.emailListBackground, cursor="hand2")
-        self.header .pack(fill=X, side=TOP)
+        self.header = Frame(self.emailsList, relief=GROOVE, borderwidth=0, bg=self.emailListBackground, cursor="hand2")
+        # self.header .pack(fill=X, side=TOP)
 
         self.mailHeader = Label(self.header, text="   Search for messages...", bg=self.emailListBackground, font=my_font, cursor="hand2")
-        self.mailHeader.pack(fill=X, ipady=10, anchor="w", side=LEFT)
+        # self.mailHeader.pack(fill=X, ipady=10, anchor="w", side=LEFT)
 
         self.currentFolder = "Inbox"
 
@@ -161,11 +164,11 @@ class Client:
         self.canvas.configure(yscrollcommand=scrollbar.set)
         self.canvas.bind('<Configure>', self.on_configure)
 
-        self.frame = Frame(self.canvas, bg="#696969")
+        self.frame = Frame(self.canvas, bg=menuBackground)
         self.canvas.create_window((0, 0), window=self.frame, anchor='nw')
 
         self.userImage = PhotoImage(file="imagesBig/user.png")
-        self.update_emails(MyProject.data.inbox)
+        self.update_emails(data.inbox)
 
 
         # Email Detail Window
@@ -175,6 +178,8 @@ class Client:
         self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails", bg=self.emailListBackground, font=my_font, cursor="hand2")
         self.detailLabel.pack(fill=X, ipady=10, side=TOP)
 
+        new_message.open_new_message(root)
+
 
     def update_emails(self, emails):
         for item in self.frame.pack_slaves():
@@ -182,14 +187,14 @@ class Client:
 
         for key, value in emails.items():
             email = Frame(self.frame, relief=GROOVE, bg=self.inactiveEmail)
-            email.pack(fill=X, side=TOP, ipadx=90, ipady=5, pady=(1, 0), padx=0, anchor="w")
+            email.pack(fill=X, side=TOP, ipadx=90, ipady=5, pady=(0, 1), anchor="w")
             email.bind("<Button-1>", lambda event, id=key: self.select_email(id))
 
             photo = Label(email, image=self.userImage, bg=email.cget("bg"))
-            photo.grid(row=0, column=0, padx=8, pady=1)
+            photo.grid(row=0, column=0, padx=15, pady=(10, 1), rowspan=2)
 
             email_from = Label(email, text=value["from"], bg=email.cget("bg"), font=self.fontFrom)
-            email_from.grid(row=0, column=1, padx=8, pady=1, sticky="W")
+            email_from.grid(row=0, column=1, padx=8, pady=(5,0), sticky="SW")
 
             subject = Label(email, text=value["subject"], bg=email.cget("bg"), font=self.fontSubject)
             subject.grid(row=1, column=1, padx=8, pady=1, sticky="W")
@@ -219,15 +224,15 @@ class Client:
             cnt += 1
         email_array = {}
         if self.currentFolder == "Inbox":
-            email_array = MyProject.data.inbox
+            email_array = data.inbox
         elif self.currentFolder == "Spam":
-            email_array = MyProject.data.spam
+            email_array = data.spam
         elif self.currentFolder == "Trash":
-            email_array = MyProject.data.trash
+            email_array = data.trash
         elif self.currentFolder == "Sent":
-            email_array = MyProject.data.sent
+            email_array = data.sent
         elif self.currentFolder == "Drafts":
-            email_array = MyProject.data.drafts
+            email_array = data.drafts
 
         for key, value in email_array.items():
             if key == id:

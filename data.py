@@ -11,57 +11,59 @@ test_text = "Pellentesque ut ex nisl. Sed feugiat posuere nunc, sed mattis sapie
             "dui fringilla vehicula sed ut augue. Maecenas vel tortor nibh. Morbi nec pellentesque ante, ac ultricies " \
             "odio. Praesent et enim vel nisi gravida bibendum at et diam. In at est quis elit viverra dictum. "
 
+mail_from = "Petr.matej@vsb.cz"
+
 inbox = {
             1: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": test_text
             },
             2: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             3: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             4: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             5: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             6: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             7: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             8: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             9: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "This is test subject",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
@@ -70,49 +72,49 @@ inbox = {
 
 spam = {
             1: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             2: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             3: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             4: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             5: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             6: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             7: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
             },
             8: {
-                "from": "petr.matej",
+                "from": mail_from,
                 "subject": "spam mail",
                 "date": "20.10.2019 10:30",
                 "message": "Hey man how u doing"
