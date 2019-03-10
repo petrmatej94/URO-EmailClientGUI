@@ -5,7 +5,8 @@ mainBg = "#F6F8FC"
 my_font = "Helvetica 10"
 primary_bg = "#1A1F30"
 
-def open_new_message(root):
+
+def open_new_message(my_class, root):
     window = Toplevel(root)
     # window.grab_set()
     window.geometry("600x400")
@@ -42,12 +43,23 @@ def open_new_message(root):
 
 
     # Toolbar
-    toolbar_bg = primary_bg
-    toolbar_frame = Frame(window, relief=GROOVE, border=0, bg=toolbar_bg)
-    toolbar_frame.pack(fill=X, expand=0, side=TOP, padx=0, pady=0, ipadx=10, ipady=10)
+    inactive_bg = "#3E75FF"
+    active_bg = '#3e55ff'
 
-    test = Label(toolbar_frame, text="Toolbar", bg=mainBg)
-    test.pack()
+    toolbar_bg = primary_bg
+    toolbar_frame = Frame(window, relief=GROOVE, border=0, bg=mainBg)
+    toolbar_frame.pack(fill=X, expand=0, side=TOP, padx=7, pady=(0,7), ipadx=0, ipady=0)
+
+    img = PhotoImage(file="imagesSmall/time.png")   # TO DO - images dont work now
+    send_button = Button(toolbar_frame, image=my_class.draftImage)
+    save_button = Button(toolbar_frame, text="Save to Drafts")
+
+    send_button.pack(anchor="e", side=LEFT, padx=2, ipady=2, ipadx=5)
+    send_button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0, activeforeground="white")
+
+    save_button.pack(anchor="e", side=LEFT, padx=2, ipady=2, ipadx=5)
+    save_button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0, activeforeground="white")
+
 
 
     # Message Entry

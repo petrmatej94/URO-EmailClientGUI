@@ -1,6 +1,3 @@
-# petr matej - tohle jen zkousim co to udela...
-
-
 from tkinter import font
 from tkinter import *
 import data, settings, new_message
@@ -22,7 +19,7 @@ class Client:
 
         header = self.mailHeader.cget("text")
         if action == "composeEmailButton":
-            new_message.open_new_message(root)
+            new_message.open_new_message(self, root)
         elif action == "InboxButton":
             self.InboxButton.config(bg=activeItemBg)
             self.update_emails(data.inbox)
@@ -178,7 +175,7 @@ class Client:
         self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails", bg=self.emailListBackground, font=my_font, cursor="hand2")
         self.detailLabel.pack(fill=X, ipady=10, side=TOP)
 
-        new_message.open_new_message(root)
+        # new_message.open_new_message(root)
 
 
     def update_emails(self, emails):
@@ -246,6 +243,8 @@ class Client:
                 font_date = ("Arial", 8, "")
                 font_subject = ("Arial", 17, "bold")
 
+                email.grid_columnconfigure(1, weight=1)
+
                 photo = Label(email, image=self.userImage, bg=email.cget("bg"))
                 photo.grid(row=0, column=0, padx=8, pady=1)
 
@@ -258,8 +257,8 @@ class Client:
                 subject = Label(email, text=value["subject"], bg=email.cget("bg"), font=font_subject)
                 subject.grid(row=2, column=1, padx=8, pady=0, sticky="W")
 
-                subject = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor=N, font=font_from, wraplength=400)
-                subject.grid(row=3, column=1, padx=8, pady=1, sticky="w", columnspan=2)
+                subject = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor="nw", font=font_date, wraplength=self.emailWindow.winfo_width()-100)
+                subject.grid(row=3, column=1, padx=8, pady=1, sticky="nw")
                 subject.config(height=30)
 
                 subject = Label(email, text="Attachments", bg=email.cget("bg"), font=font_from)
