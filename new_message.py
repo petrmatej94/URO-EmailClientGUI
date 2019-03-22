@@ -6,7 +6,7 @@ my_font = "Helvetica 10"
 primary_bg = "#1A1F30"
 
 
-def open_new_message(my_class, root):
+def open_new_message(my_class, root, imagesArray):
     window = Toplevel(root)
     # window.grab_set()
     window.geometry("600x400")
@@ -50,17 +50,10 @@ def open_new_message(my_class, root):
     toolbar_frame = Frame(window, relief=GROOVE, border=0, bg=mainBg)
     toolbar_frame.pack(fill=X, expand=0, side=TOP, padx=7, pady=(0,7), ipadx=0, ipady=0)
 
-    img = PhotoImage(file="imagesSmall/time.png")   # TO DO - images dont work now
-    send_button = Button(toolbar_frame, image=my_class.draftImage)
-    save_button = Button(toolbar_frame, text="Save to Drafts")
-
-    send_button.pack(anchor="e", side=LEFT, padx=2, ipady=2, ipadx=5)
-    send_button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0, activeforeground="white")
-
-    save_button.pack(anchor="e", side=LEFT, padx=2, ipady=2, ipadx=5)
-    save_button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0, activeforeground="white")
-
-
+    for img in imagesArray:
+        butt = HoverButton(toolbar_frame, image=img, activebackground=inactive_bg, background=mainBg)
+        butt.pack(anchor="e", side=LEFT, padx=0, ipady=2, ipadx=5)
+        butt.config(fg="white", borderwidth=0)
 
     # Message Entry
     message_bg = "white"
@@ -93,3 +86,17 @@ def open_new_message(my_class, root):
 
     attachment_button.pack(anchor="w", side=LEFT, padx=padx, ipady=2, ipadx=5)
     attachment_button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0, activeforeground="white")
+
+
+class HoverButton(Button):
+    def __init__(self, master, **kw):
+        Button.__init__(self, master=master, **kw)
+        self.defaultBackground = self["background"]
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+
+    def on_enter(self, e):
+        self['background'] = self['activebackground']
+
+    def on_leave(self, e):
+        self['background'] = self.defaultBackground

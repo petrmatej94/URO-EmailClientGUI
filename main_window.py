@@ -1,6 +1,9 @@
 from tkinter import font
 from tkinter import *
 import data, settings, new_message
+import os
+from PIL import Image
+from PIL import ImageTk
 
 menuBackground = "#1A1F30"
 activeItemBg = '#151825'
@@ -19,7 +22,7 @@ class Client:
 
         header = self.mailHeader.cget("text")
         if action == "composeEmailButton":
-            new_message.open_new_message(self, root)
+            new_message.open_new_message(self, root, self.toolbarImages)
         elif action == "InboxButton":
             self.InboxButton.config(bg=activeItemBg)
             self.update_emails(data.inbox)
@@ -49,27 +52,44 @@ class Client:
     def __init__(self, root):
         root.title('Email Client')
         root.geometry("800x700")
-        root.minsize(width=1200, height=400)
+        root.minsize(width=1200, height=720)
         root.grid()
+        root.bind("<Configure>", self.on_resize)
 
         # Main Window
         self.window = Frame(root)
         self.window.pack(fill=BOTH, expand=1)
-
-        # Top Menu
-        # self.topMenu = Frame(self.window, relief=GROOVE, borderwidth=2, bg="gray")
-        # self.topMenu.pack(fill=X, side=TOP, ipady=20)
+        self.message = None
 
         self.topMenu = Menu(self.window)
         root.config(menu=self.topMenu)
 
-        self.menuData = Menu(self.topMenu, tearoff=0)
-        self.topMenu.add_cascade(label="File", menu=self.menuData)
-        self.menuData.add_command(label="Compose Email")
-        self.menuData.add_command(label="Export Emails")
-        self.menuData.add_command(label="Settings", command=callback(self.menu_action, "Settings"))
-        self.menuData.add_command(label="Exit")
+        self.menuFile = Menu(self.topMenu, tearoff=0)
+        self.topMenu.add_cascade(label="File", menu=self.menuFile)
+        self.menuFile.add_command(label="Compose Email")
+        self.menuFile.add_command(label="Export Emails")
+        self.menuFile.add_command(label="Settings", command=callback(self.menu_action, "Settings"))
+        self.menuFile.add_command(label="Exit", command=root.destroy)
 
+        self.menuEdit = Menu(self.topMenu, tearoff=0)
+        self.topMenu.add_cascade(label="Edit", menu=self.menuEdit)
+        self.menuEdit.add_command(label="Undo")
+        self.menuEdit.add_command(label="Redo")
+        self.menuEdit.add_command(label="Copy")
+        self.menuEdit.add_command(label="Paste")
+
+        self.menuTools = Menu(self.topMenu, tearoff=0)
+        self.topMenu.add_cascade(label="Tools", menu=self.menuTools)
+        self.menuTools.add_command(label="Console")
+        self.menuTools.add_command(label="Drawings")
+        self.menuTools.add_command(label="Addons")
+        self.menuTools.add_command(label="Plugins")
+
+        self.imagesNames = os.listdir("imagesSmall/toolbar")
+        print(self.imagesNames)
+        self.toolbarImages = []
+        for image in self.imagesNames:
+            self.toolbarImages.append(PhotoImage(file="imagesSmall/toolbar/" + image))
 
         # Main Frame
         self.mainFrame = Frame(self.window, relief=GROOVE, bg="white")
@@ -175,8 +195,6 @@ class Client:
         self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails", bg=self.emailListBackground, font=my_font, cursor="hand2")
         self.detailLabel.pack(fill=X, ipady=10, side=TOP)
 
-        # new_message.open_new_message(root)
-
 
     def update_emails(self, emails):
         for item in self.frame.pack_slaves():
@@ -241,7 +259,8 @@ class Client:
                 email = self.emailWindow
                 font_from = ("Arial", 8, "bold")
                 font_date = ("Arial", 8, "")
-                font_subject = ("Arial", 17, "bold")
+                font_subject = ("Georgia", 20, "bold")
+                font_text = ("Arial", 10, "")
 
                 email.grid_columnconfigure(1, weight=1)
 
@@ -255,24 +274,68 @@ class Client:
                 email_from.grid(row=1, column=1, padx=8, pady=0, sticky="W")
 
                 subject = Label(email, text=value["subject"], bg=email.cget("bg"), font=font_subject)
-                subject.grid(row=2, column=1, padx=8, pady=0, sticky="W")
+                subject.grid(row=2, column=1, padx=8, pady=(2,10), sticky="W")
 
-                subject = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor="nw", font=font_date, wraplength=self.emailWindow.winfo_width()-100)
-                subject.grid(row=3, column=1, padx=8, pady=1, sticky="nw")
-                subject.config(height=30)
+                self.message = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor="nw", font=font_text, wraplength=self.emailWindow.winfo_width()-100)
+                self.message.grid(row=3, column=1, padx=8, pady=1, sticky="nsew")
 
-                subject = Label(email, text="Attachments", bg=email.cget("bg"), font=font_from)
-                subject.grid(row=4, column=1, padx=8, pady=1, sticky="W")
+                divideFrame = Frame(email, bg=self.inactiveEmail)
+                divideFrame.grid(row=4, column=0, columnspan=3, padx=8, ipady=1, pady=20, sticky="nsew")
 
-                subject = Label(email, text="Text Input Area", bg=email.cget("bg"), font=font_from)
-                subject.grid(row=5, column=1, padx=8, pady=1, sticky="W")
 
-                subject = Label(email, text="Buttons", bg=email.cget("bg"), font=font_from)
-                subject.grid(row=6, column=1, padx=8, pady=1, sticky="W")
+                # Attachments frame
+                attachments_frame = Frame(email, relief=GROOVE, border=0, bg="white")
+                attachments_frame.grid(row=5, column=1, sticky="nsew", pady=(0,20))
+
+                image = Image.open("imagesBig/wild.png")
+                image = image.resize((100, 60), Image.ANTIALIAS)
+
+                self.img = ImageTk.PhotoImage(image)
+                img1 = Label(attachments_frame, image=self.img, width=100, height=60)
+                img1.pack(side=LEFT, padx=(0, 10))
+
+                img1 = Label(attachments_frame, image=self.img, width=100, height=60)
+                img1.pack(side=LEFT, padx=(0, 10))
+
+                img1 = Label(attachments_frame, image=self.img, width=100, height=60)
+                img1.pack(side=LEFT, padx=(0, 10))
+
+
+                # Text Input in Email frame
+                message_frame = Frame(email, relief=GROOVE, border=0, bg="black", borderwidth=5)
+                message_frame.grid(row=6, column=1, sticky="nsew")
+
+                entry = Text(message_frame, height=5)
+                entry.pack(fill=X, expand=1)
+                entry.insert(END, "Write your message here...")
+
+
+                # Buttons in Email frame
+                buttons_frame = Frame(master=email, bg="white")
+                buttons_frame.grid(row=7, column=0, columnspan=3, padx=8, pady=1, sticky="nsew")
+
+                send_button = Button(buttons_frame, text="Send")
+                save_button = Button(buttons_frame, text="Save to Drafts")
+                throw_button = Button(buttons_frame, text="Throw away")
+
+                buttons = [send_button, save_button, throw_button]
+                inactive_bg = "#3E75FF"
+                active_bg = '#3e55ff'
+
+                for button in buttons:
+                    button.pack(anchor="e", side=RIGHT, padx=2, ipady=2, ipadx=5)
+                    button.config(fg="white", bg=inactive_bg, activebackground=active_bg, borderwidth=0,
+                                  activeforeground="white")
+
+    def on_resize(self, event):
+        if self.message is not None:
+            self.message.config(wraplength=self.emailWindow.winfo_width()-100)
 
 
 
 root = Tk()
 app = Client(root)
 root.mainloop()
+
+
 
