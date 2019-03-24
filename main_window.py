@@ -113,39 +113,40 @@ class Client:
         folder = "imagesSmall/"
         images = ["inbox.png", "draft.png", "sent.png", "spam.png", "trash.png"]
 
+        anchor="w"
         i = 0
         self.inboxImage = PhotoImage(file=folder+images[i])
         self.InboxButton = Button(self.leftMenu, text=items[i], bg=activeItemBg, fg="white", cursor="hand2",
                                          image=self.inboxImage, compound="left", activebackground=activeItemBg,
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor="w", command=callback(self.menu_action, "InboxButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "InboxButton"))
         self.InboxButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
         self.draftImage = PhotoImage(file=folder+images[i])
         self.DraftsButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white", cursor="hand2",
                                          image=self.draftImage, compound="left", activebackground=activeItemBg,
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor="w", command=callback(self.menu_action, "DraftsButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "DraftsButton"))
         self.DraftsButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
         self.sentImage = PhotoImage(file=folder+images[i])
         self.SentButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
                                          image=self.sentImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor="w", command=callback(self.menu_action, "SentButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "SentButton"))
         self.SentButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
         self.spamImage = PhotoImage(file=folder+images[i])
         self.SpamButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
                                          image=self.spamImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor="w", command=callback(self.menu_action, "SpamButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "SpamButton"))
         self.SpamButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
         self.trashImage = PhotoImage(file=folder+images[i])
         self.TrashButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
                                          image=self.trashImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor="w", command=callback(self.menu_action, "TrashButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "TrashButton"))
         self.TrashButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
@@ -195,6 +196,7 @@ class Client:
         self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails", bg=self.emailListBackground, font=my_font, cursor="hand2")
         self.detailLabel.pack(fill=X, ipady=10, side=TOP)
 
+        # settings.open_settings(root)
 
     def update_emails(self, emails):
         for item in self.frame.pack_slaves():
