@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 
 
-def open_settings(root):
+def open_settings(root, instance):
     window = Toplevel(root)
     # window.grab_set()
     window.geometry("600x400")
@@ -32,19 +32,17 @@ def open_settings(root):
     i += 1
 
     Label(group, text="Highlight messages:").grid(row=i, column=0, pady=(10,0))
-    fo = StringVar()
-    r1 = Radiobutton(group, text="Activated", variable=fo, value="Yes")
+    r1 = Radiobutton(group, text="Activated", variable=instance.variable_messages, value="Yes")
     r1.grid(row=i, column=1, sticky="nsew", pady=(10,0))
-    r2 = Radiobutton(group, text="Deactivated", variable=fo, value="No")
+    r2 = Radiobutton(group, text="Deactivated", variable=instance.variable_messages, value="No")
     r2.grid(row=i, column=2, sticky="nsew", pady=(10,0))
     r1.select()
     i += 1
 
     Label(group, text="Key shortcuts:").grid(row=i, column=0)
-    fo2 = StringVar()
-    r11 = Radiobutton(group, text="Activated", variable=fo2, value="Yes")
+    r11 = Radiobutton(group, text="Activated", variable=instance.variable_keys, value="Yes")
     r11.grid(row=i, column=1)
-    r22 = Radiobutton(group, text="Deactivated", variable=fo2, value="No")
+    r22 = Radiobutton(group, text="Deactivated", variable=instance.variable_keys, value="No")
     r22.grid(row=i, column=2)
     r11.select()
     i += 1
@@ -56,24 +54,20 @@ def open_settings(root):
     i = 0
     Label(localization, text="Language:").grid(row=i, column=0)
     choices = ['English', 'German', 'Czech', 'Poland']
-    variable = StringVar(window)
-    variable.set('English')
+    instance.variable_language.set('English')
     ttk.Combobox(localization, values=choices).grid(row=i, column=1, sticky="nsew")
     i += 1
 
     Label(localization, text="Phone format:").grid(row=i, column=0, sticky="nsew")
     choices = ['+420', '+44', '+123', '987']
-    variable2 = StringVar()
-    variable2.set('English')
-    print(variable2.get())
+    instance.variable_phone.set('+420')
     ttk.Combobox(localization, values=choices).grid(row=i, column=1, sticky="nsew")
     i += 1
 
     Label(localization, text="Number format:").grid(row=i, column=0)
-    fo22 = StringVar()
-    r111 = Radiobutton(localization, text="Decimal point", variable=fo22, value="point")
+    r111 = Radiobutton(localization, text="Decimal point", variable=instance.variable_number, value="point")
     r111.grid(row=i, column=1)
-    r222 = Radiobutton(localization, text="Decimal comma", variable=fo22, value="comma")
+    r222 = Radiobutton(localization, text="Decimal comma", variable=instance.variable_number, value="comma")
     r222.grid(row=i, column=2)
     r111.select()
     i += 1
@@ -118,10 +112,11 @@ def create_buttons(master):
 class Checkbar(Frame):
     def __init__(self, parent=None, picks=[], side=TOP, anchor=W):
         Frame.__init__(self, parent)
-        vars = []
+        self.vars = [IntVar(), IntVar(), IntVar(), IntVar(), IntVar(), IntVar(), IntVar()]
+        i = 0
         for pick in picks:
-            var = IntVar()
-            chk = Checkbutton(self, text=pick, variable=var)
+            chk = Checkbutton(self, text=pick, variable=self.vars[i])
             chk.pack(side=side, anchor=anchor, expand=YES)
             chk.select()
-            vars.append(var)
+            i+=1
+

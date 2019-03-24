@@ -44,7 +44,7 @@ class Client:
             self.TrashButton.config(bg=activeItemBg)
             self.update_emails(data.trash)
         elif action == "Settings":
-            settings.open_settings(root)
+            settings.open_settings(root, self)
 
         # self.mailHeader.config(text=header)
         self.currentFolder = header
@@ -87,6 +87,13 @@ class Client:
 
         self.imagesNames = os.listdir("imagesSmall/toolbar")
         print(self.imagesNames)
+        self.variable_messages = StringVar()
+        self.variable_keys = StringVar()
+        self.variable_categories = StringVar()
+        self.variable_display = StringVar()
+        self.variable_language = StringVar()
+        self.variable_phone = StringVar()
+        self.variable_number = StringVar()
         self.toolbarImages = []
         for image in self.imagesNames:
             self.toolbarImages.append(PhotoImage(file="imagesSmall/toolbar/" + image))
