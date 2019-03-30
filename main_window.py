@@ -46,13 +46,12 @@ class Client:
         elif action == "Settings":
             settings.open_settings(root, self)
 
-        # self.mailHeader.config(text=header)
         self.currentFolder = header
 
     def __init__(self, root):
         root.title('Email Client')
         root.geometry("800x700")
-        root.minsize(width=1200, height=720)
+        root.minsize(width=1200, height=740)
         root.grid()
         root.bind("<Configure>", self.on_resize)
 
@@ -86,7 +85,6 @@ class Client:
         self.menuTools.add_command(label="Plugins")
 
         self.imagesNames = os.listdir("imagesSmall/toolbar")
-        print(self.imagesNames)
         self.variable_messages = StringVar()
         self.variable_keys = StringVar()
         self.variable_categories = StringVar()
@@ -94,6 +92,7 @@ class Client:
         self.variable_language = StringVar()
         self.variable_phone = StringVar()
         self.variable_number = StringVar()
+        self.variable_timezone = StringVar()
         self.toolbarImages = []
         for image in self.imagesNames:
             self.toolbarImages.append(PhotoImage(file="imagesSmall/toolbar/" + image))
@@ -107,53 +106,60 @@ class Client:
         self.leftMenu.pack(fill=Y, side=LEFT, ipadx=30)
 
         self.sendImage = PhotoImage(file="imagesSmall/mail.png")
-        self.composeEmailButton = Button(self.leftMenu, text='  Compose Email', bg="#3E75FF", fg="white", cursor="hand2",
+        self.composeEmailButton = Button(self.leftMenu, text='  Compose Email', bg="#3E75FF", fg="white",
+                                         cursor="hand2",
                                          image=self.sendImage, compound="left", activebackground='#3e55ff',
-                                         activeforeground="white", borderwidth=0, font=my_font + " bold", anchor='c', command=callback(self.menu_action, "composeEmailButton"))
+                                         activeforeground="white", borderwidth=0, font=my_font + " bold", anchor='c',
+                                         command=callback(self.menu_action, "composeEmailButton"))
         self.composeEmailButton.pack(fill=X, side=TOP, ipadx=15, pady=30, ipady=10)
 
         # Left Menu items
-        self.la=Label(self.leftMenu, text="MAILBOXES", bg=menuBackground, fg="white", anchor="w", font=my_font)
+        self.la = Label(self.leftMenu, text="MAILBOXES", bg=menuBackground, fg="white", anchor="w", font=my_font)
         self.la.pack(fill=X, padx=8, pady=1)
 
-        items = ["    Inbox", "    Drafts", "    Sent", "    Spam", "    Trash",]
+        items = ["    Inbox", "    Drafts", "    Sent", "    Spam", "    Trash", ]
         folder = "imagesSmall/"
         images = ["inbox.png", "draft.png", "sent.png", "spam.png", "trash.png"]
 
-        anchor="w"
+        anchor = "w"
         i = 0
-        self.inboxImage = PhotoImage(file=folder+images[i])
+        self.inboxImage = PhotoImage(file=folder + images[i])
         self.InboxButton = Button(self.leftMenu, text=items[i], bg=activeItemBg, fg="white", cursor="hand2",
-                                         image=self.inboxImage, compound="left", activebackground=activeItemBg,
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "InboxButton"))
+                                  image=self.inboxImage, compound="left", activebackground=activeItemBg,
+                                  activeforeground="white", borderwidth=0, font=my_font, anchor=anchor,
+                                  command=callback(self.menu_action, "InboxButton"))
         self.InboxButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
-        self.draftImage = PhotoImage(file=folder+images[i])
+        self.draftImage = PhotoImage(file=folder + images[i])
         self.DraftsButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white", cursor="hand2",
-                                         image=self.draftImage, compound="left", activebackground=activeItemBg,
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "DraftsButton"))
+                                   image=self.draftImage, compound="left", activebackground=activeItemBg,
+                                   activeforeground="white", borderwidth=0, font=my_font, anchor=anchor,
+                                   command=callback(self.menu_action, "DraftsButton"))
         self.DraftsButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
-        self.sentImage = PhotoImage(file=folder+images[i])
+        self.sentImage = PhotoImage(file=folder + images[i])
         self.SentButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
-                                         image=self.sentImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "SentButton"))
+                                 image=self.sentImage, compound="left", activebackground=activeItemBg, cursor="hand2",
+                                 activeforeground="white", borderwidth=0, font=my_font, anchor=anchor,
+                                 command=callback(self.menu_action, "SentButton"))
         self.SentButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
-        self.spamImage = PhotoImage(file=folder+images[i])
+        self.spamImage = PhotoImage(file=folder + images[i])
         self.SpamButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
-                                         image=self.spamImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "SpamButton"))
+                                 image=self.spamImage, compound="left", activebackground=activeItemBg, cursor="hand2",
+                                 activeforeground="white", borderwidth=0, font=my_font, anchor=anchor,
+                                 command=callback(self.menu_action, "SpamButton"))
         self.SpamButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
-        self.trashImage = PhotoImage(file=folder+images[i])
+        self.trashImage = PhotoImage(file=folder + images[i])
         self.TrashButton = Button(self.leftMenu, text=items[i], bg=menuBackground, fg="white",
-                                         image=self.trashImage, compound="left", activebackground=activeItemBg, cursor="hand2",
-                                         activeforeground="white", borderwidth=0, font=my_font, anchor=anchor, command=callback(self.menu_action, "TrashButton"))
+                                  image=self.trashImage, compound="left", activebackground=activeItemBg, cursor="hand2",
+                                  activeforeground="white", borderwidth=0, font=my_font, anchor=anchor,
+                                  command=callback(self.menu_action, "TrashButton"))
         self.TrashButton.pack(fill=X, side=TOP, ipadx=15, pady=0, ipady=10)
         i += 1
 
@@ -172,10 +178,9 @@ class Client:
 
         # Emails List: Search Frame
         self.header = Frame(self.emailsList, relief=GROOVE, borderwidth=0, bg=self.emailListBackground, cursor="hand2")
-        # self.header .pack(fill=X, side=TOP)
 
-        self.mailHeader = Label(self.header, text="   Search for messages...", bg=self.emailListBackground, font=my_font, cursor="hand2")
-        # self.mailHeader.pack(fill=X, ipady=10, anchor="w", side=LEFT)
+        self.mailHeader = Label(self.header, text="   Search for messages...", bg=self.emailListBackground,
+                                font=my_font, cursor="hand2")
 
         self.currentFolder = "Inbox"
 
@@ -195,15 +200,13 @@ class Client:
         self.userImage = PhotoImage(file="imagesBig/user.png")
         self.update_emails(data.inbox)
 
-
         # Email Detail Window
         self.emailWindow = Frame(self.mainFrame, relief=GROOVE, bg="white")
         self.emailWindow.pack(fill=BOTH, expand=1, side=LEFT, pady=15, padx=30)
 
-        self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails", bg=self.emailListBackground, font=my_font, cursor="hand2")
+        self.detailLabel = Label(self.emailWindow, text="You don't have any selected emails",
+                                 bg=self.emailListBackground, font=my_font, cursor="hand2")
         self.detailLabel.pack(fill=X, ipady=10, side=TOP)
-
-        # settings.open_settings(root)
 
     def update_emails(self, emails):
         for item in self.frame.pack_slaves():
@@ -218,13 +221,13 @@ class Client:
             photo.grid(row=0, column=0, padx=15, pady=(10, 1), rowspan=2)
 
             email_from = Label(email, text=value["from"], bg=email.cget("bg"), font=self.fontFrom)
-            email_from.grid(row=0, column=1, padx=8, pady=(5,0), sticky="SW")
+            email_from.grid(row=0, column=1, padx=8, pady=(5, 0), sticky="SW")
 
             subject = Label(email, text=value["subject"], bg=email.cget("bg"), font=self.fontSubject)
             subject.grid(row=1, column=1, padx=8, pady=1, sticky="W")
 
             text = value["message"]
-            if len(text) >= 40: text = text[:40]+"..."
+            if len(text) >= 40: text = text[:40] + "..."
 
             message = Label(email, text=text, bg=email.cget("bg"), font=self.fontMessage)
             message.grid(row=2, column=1, padx=8, pady=1, sticky="W")
@@ -283,18 +286,18 @@ class Client:
                 email_from.grid(row=1, column=1, padx=8, pady=0, sticky="W")
 
                 subject = Label(email, text=value["subject"], bg=email.cget("bg"), font=font_subject)
-                subject.grid(row=2, column=1, padx=8, pady=(2,10), sticky="W")
+                subject.grid(row=2, column=1, padx=8, pady=(2, 10), sticky="W")
 
-                self.message = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor="nw", font=font_text, wraplength=self.emailWindow.winfo_width()-100)
+                self.message = Label(email, text=value["message"], bg=email.cget("bg"), justify=LEFT, anchor="nw",
+                                     font=font_text, wraplength=self.emailWindow.winfo_width() - 100)
                 self.message.grid(row=3, column=1, padx=8, pady=1, sticky="nsew")
 
                 divideFrame = Frame(email, bg=self.inactiveEmail)
                 divideFrame.grid(row=4, column=0, columnspan=3, padx=8, ipady=1, pady=20, sticky="nsew")
 
-
                 # Attachments frame
                 attachments_frame = Frame(email, relief=GROOVE, border=0, bg="white")
-                attachments_frame.grid(row=5, column=1, sticky="nsew", pady=(0,20))
+                attachments_frame.grid(row=5, column=1, sticky="nsew", pady=(0, 20))
 
                 image = Image.open("imagesBig/wild.png")
                 image = image.resize((100, 60), Image.ANTIALIAS)
@@ -309,15 +312,14 @@ class Client:
                 img1 = Label(attachments_frame, image=self.img, width=100, height=60)
                 img1.pack(side=LEFT, padx=(0, 10))
 
-
                 # Text Input in Email frame
                 message_frame = Frame(email, relief=GROOVE, border=0, bg="black", borderwidth=5)
                 message_frame.grid(row=6, column=1, sticky="nsew")
 
+                Label(message_frame, text="Quick Reply", justify="left", anchor="c").pack(fill=BOTH, expand=1)
                 entry = Text(message_frame, height=5)
                 entry.pack(fill=X, expand=1)
                 entry.insert(END, "Write your message here...")
-
 
                 # Buttons in Email frame
                 buttons_frame = Frame(master=email, bg="white")
@@ -338,13 +340,9 @@ class Client:
 
     def on_resize(self, event):
         if self.message is not None:
-            self.message.config(wraplength=self.emailWindow.winfo_width()-100)
-
+            self.message.config(wraplength=self.emailWindow.winfo_width() - 100)
 
 
 root = Tk()
 app = Client(root)
 root.mainloop()
-
-
-

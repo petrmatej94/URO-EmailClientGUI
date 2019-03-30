@@ -8,7 +8,6 @@ primary_bg = "#1A1F30"
 
 def open_new_message(my_class, root, imagesArray):
     window = Toplevel(root)
-    # window.grab_set()
     window.geometry("600x400")
     window.minsize(width=600, height=400)
     window.title('Compose new Email')
@@ -40,7 +39,6 @@ def open_new_message(my_class, root, imagesArray):
     from_field.grid(row=0, column=1, padx=padx, ipadx=ipadx, pady=pady, ipady=ipady, sticky="WE")
     email_to_field.grid(row=1, column=1, padx=padx, ipadx=ipadx, pady=pady, ipady=ipady, sticky="WE")
     subject_field.grid(row=2, column=1, padx=padx, ipadx=ipadx, pady=pady, ipady=ipady, sticky="WE")
-
 
     # Toolbar
     inactive_bg = "#3E75FF"
